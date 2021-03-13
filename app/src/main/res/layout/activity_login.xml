@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background">
+
+    <EditText
+        android:id="@+id/login_EnterUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/login_EnterUserName"
+        android:textColorHint="@android:color/darker_gray"/>
+
+    <EditText
+        android:id="@+id/login_EnterPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/login_EnterPassword"
+        android:inputType="textPassword"
+        android:textColorHint="@android:color/darker_gray"
+        android:layout_below="@+id/login_EnterUserName"/>
+
+    <Button
+        android:id="@+id/login_LoginButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login_LoginButton"
+        android:background="@android:color/black"
+        android:textColor="@android:color/darker_gray"
+        android:layout_below="@id/login_EnterPassword"/>
+
+    <TextView
+        android:id="@+id/login_SignUpMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_SignUpMessage"
+        android:textColor="@android:color/darker_gray"
+        android:layout_below="@id/login_LoginButton"
+        android:onClick="goToSignUp"
+        android:clickable="true"/>
+</LinearLayout>

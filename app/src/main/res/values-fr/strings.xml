@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ImageSearch</string>
+    <string name="login_EnterUserName">Enter Username...</string>
+    <string name="login_EnterPassword">Enter Password...</string>
+    <string name="login_LoginButton">Login</string>
+    <string name="login_SignUpMessage">Don\'t have an account? Click here to register</string>
+    <string name="register_ConfirmPassword">Confirm password...</string>
+    <string name="register_CreateAccButton">Create account!</string>
+</resources>
