@@ -10,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/login_EnterUserName"
-        android:textColorHint="@android:color/darker_gray"/>
+        android:inputType="text"
+        android:textColorHint="@android:color/darker_gray"
+        android:textColor="@android:color/darker_gray"/>
 
     <EditText
         android:id="@+id/register_EnterPassword"
@@ -18,7 +20,8 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:hint="@string/login_EnterPassword"
-        android:textColorHint="@android:color/darker_gray"/>
+        android:textColorHint="@android:color/darker_gray"
+        android:textColor="@android:color/darker_gray"/>
 
     <EditText
         android:id="@+id/register_ConfirmPassword"
@@ -26,13 +29,15 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:hint="@string/register_ConfirmPassword"
-        android:textColorHint="@android:color/darker_gray"/>
+        android:textColorHint="@android:color/darker_gray"
+        android:textColor="@android:color/darker_gray"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/register_CreateAccButton"
         android:background="@android:color/black"
-        android:textColor="@android:color/darker_gray"/>
+        android:textColor="@android:color/darker_gray"
+        android:onClick="backToLogin"/>
 
 </LinearLayout>
