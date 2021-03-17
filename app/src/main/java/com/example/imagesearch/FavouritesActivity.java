@@ -21,7 +21,7 @@ public class FavouritesActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourites);
 
-        // Temporary Snackbar message that will be displayed after sign in
+        // Temporary SnackBar message that will be displayed after sign in
         View test = findViewById(R.id.activity_favourites_layout);
         Snackbar.make(test, "This is a Snackbar message!", Snackbar.LENGTH_LONG).show();
 
@@ -37,7 +37,6 @@ public class FavouritesActivity extends AppCompatActivity
             showAlertDialog(position);
         });
     }
-
 
     // Displays alert dialog for the ListView's on item click listener
     protected void showAlertDialog(int position)

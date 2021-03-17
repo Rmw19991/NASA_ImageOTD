@@ -82,9 +82,12 @@ public class RegisterActivity extends AppCompatActivity
             }
         });
     }
+    /*
+        At the moment this function takes the user back to the login page
+        once they click the CREATE ACCOUNT button
 
-    // Takes user back to login page once they click the CREATE ACCOUNT button
-    // Called in activity_register.xml - though this may change
+        Called in activity_register.xml
+    */
     public void backToLogin(View view)
     {
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
