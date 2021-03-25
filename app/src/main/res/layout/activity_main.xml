@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:background="@drawable/login_background">
+
+    <ScrollView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/home_Welcome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:text="@string/home_WelcomeMessage"
+                android:textStyle="bold"
+                android:layout_marginBottom="15dp"/>
+
+            <TextView
+                android:id="@+id/home_TitleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/home_Welcome"
+                android:layout_marginBottom="15dp"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/home_DateTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_below="@+id/home_TitleTextView"/>
+
+            <TextView
+                android:id="@+id/home_URLTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/home_DateTextView"
+                android:autoLink="web"/>
+
+            <ImageView
+                android:id="@+id/home_ImageView"
+                android:layout_width="300dp"
+                android:layout_height="250dp"
+                android:layout_below="@+id/home_URLTextView"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/home_DescTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/home_ImageView"/>
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

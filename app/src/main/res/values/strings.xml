@@ -1,9 +1,19 @@
 <resources>
     <string name="app_name">ImageSearch</string>
-    <string name="login_EnterUserName">Enter Username...</string>
-    <string name="login_EnterPassword">Enter Password...</string>
-    <string name="login_LoginButton">Login</string>
-    <string name="login_SignUpMessage">Don\'t have an account? Click here to register</string>
-    <string name="register_ConfirmPassword">Confirm password...</string>
-    <string name="register_CreateAccButton">Create account!</string>
+    <string name="toolbar_ImageSearch">Image Search</string>
+    <string name="toolbar_Favourites">Favourites</string>
+    <string name="toolbar_Help">Help</string>
+    <string name="toolbar_Home">Home</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="home_WelcomeMessage">Image of the Day</string>
+    <string name="navTitle_ImageSearch">Search</string>
+    <string name="navTitle_Favourites">Favourites</string>
+    <string name="navTitle_Home">Home</string>
+    <string name="imageSearch_Date">Date:</string>
+    <string name="imageSearch_URL">URL:</string>
+    <string name="imageSearch_HDURL">HDURL:</string>
+    <string name="imageSearch_SelectDate">Select Date</string>
+    <string name="imageSearch_SearchImage">Search</string>
+    <string name="imageSearch_SaveImage">Save Image</string>
 </resources>

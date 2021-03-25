@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background"
+    android:layout_centerHorizontal="true">
+
+    <TextView
+        android:id="@+id/imageSearch_DateTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageSearch_SelectDateButtonView"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/imageSearch_URLTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageSearch_DateTextView"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/imageSearch_HDURLTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:visibility="invisible"
+        android:layout_below="@+id/imageSearch_URLTextView"
+        android:layout_margin="10dp"/>
+
+    <Button
+        android:id="@+id/imageSearch_SelectDateButtonView"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="@string/imageSearch_SelectDate"
+        android:onClick="showDatePickerDialog"
+        android:layout_margin="10dp"
+        android:textColor="@android:color/black"/>
+
+    <Button
+        android:id="@+id/imageSearch_SearchButtonView"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="@string/imageSearch_SearchImage"
+        android:layout_margin="10dp"
+        android:textColor="@android:color/black"/>
+
+    <Button
+        android:id="@+id/imageSearch_SaveButtonView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/imageSearch_SaveImage"
+        android:layout_below="@+id/imageSearch_HDURLTextView"
+        android:layout_margin="10dp"
+        android:textColor="@android:color/black"/>
+</RelativeLayout>

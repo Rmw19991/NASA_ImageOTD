@@ -1,0 +1,47 @@
+<!-- This DrawerLayout has two children at the root  -->
+<LinearLayout
+    android:theme="@style/AppTheme"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:background="@android:color/darker_gray"
+        app:popupTheme="@style/ThemeOverlay.MyTheme">
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- The navigation drawer that comes from the left -->
+        <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
+
+        <include layout="@layout/activity_favourites"
+            android:id="@+id/favourites_layout"
+            android:visibility="invisible"/>
+
+        <include layout="@layout/activity_image_search"
+            android:id="@+id/image_search_layout"
+            android:visibility="invisible"/>
+
+        <include layout="@layout/activity_main"
+            android:id="@+id/home_layout"
+            android:visibility="invisible"/>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:itemTextColor="@android:color/black"
+            app:menu="@menu/toolbar_menu"
+            app:headerLayout="@layout/nav_header_home"/>
+    </androidx.drawerlayout.widget.DrawerLayout>
+</LinearLayout>
