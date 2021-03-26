@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:background="@drawable/main_background">
@@ -61,5 +62,15 @@
                 android:layout_below="@+id/home_ImageView"
                 android:layout_marginTop="10dp"/>
         </RelativeLayout>
+
     </ScrollView>
+
+    <ProgressBar style="?android:attr/progressBarStyleHorizontal"
+        android:id="@+id/main_ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0"
+        android:progressTint="@android:color/white"
+        android:visibility="visible"/>
 </LinearLayout>

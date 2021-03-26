@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import org.json.JSONObject;
 import java.io.FileOutputStream;
@@ -70,12 +71,14 @@ public class MainActivity extends ToolbarActivity
         String hdURL;
         String desc;
         Bitmap currentPicture;
+        ProgressBar progressBar;
 
         @Override
         protected String doInBackground(String... args)
         {
             try
             {
+                progressBar = findViewById(R.id.main_ProgressBar);
                 URL conURL = new URL(args[0]);
 
                 // Open the connection
@@ -96,6 +99,7 @@ public class MainActivity extends ToolbarActivity
                         inline+=sc.nextLine();
                     }
                     sc.close();
+                    progressBar.setProgress(25);
                 }
 
                 // Create a JSON object using the string that holds the JSON data
@@ -122,6 +126,7 @@ public class MainActivity extends ToolbarActivity
                 Log.e("ERROR", e.getMessage());
             }
 
+            progressBar.setProgress(50);
             // If the hdurl is not null the program will retrieve the image
             if (hdURL != null)
             {
@@ -137,6 +142,7 @@ public class MainActivity extends ToolbarActivity
                         try
                         {
                             currentPicture = BitmapFactory.decodeStream(connection.getInputStream());
+                            progressBar.setProgress(75);
                         }
                         catch (OutOfMemoryError e)
                         {
@@ -161,6 +167,7 @@ public class MainActivity extends ToolbarActivity
             {
                 hdURL = "Cannot provide HDURL";
             }
+            progressBar.setProgress(100);
             return "Done";
         }
 
@@ -177,6 +184,9 @@ public class MainActivity extends ToolbarActivity
             dateTextView.setText(date);
             urlTextView.setText(hdURL);
             descTextView.setText(desc);
+
+            progressBar = findViewById(R.id.main_ProgressBar);
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 }
