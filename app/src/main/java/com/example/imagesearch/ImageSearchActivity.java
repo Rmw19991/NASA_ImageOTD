@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
-import android.provider.ContactsContract;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
