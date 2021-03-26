@@ -127,9 +127,6 @@ public class ImageSearchActivity extends ToolbarActivity
         @Override
         protected String doInBackground(String... args)
         {
-            Looper.prepare();
-            //MainActivity activity = new MainActivity();
-            Context ctx = new ImageSearchActivity().getBaseContext();
            try
            {
                URL conURL = new URL(args[0]);
