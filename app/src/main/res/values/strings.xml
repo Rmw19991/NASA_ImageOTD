@@ -4,16 +4,25 @@
     <string name="toolbar_Favourites">Favourites</string>
     <string name="toolbar_Help">Help</string>
     <string name="toolbar_Home">Home</string>
+    <string name="toolbar_Contact">Contact</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="home_WelcomeMessage">Image of the Day</string>
     <string name="navTitle_ImageSearch">Search</string>
     <string name="navTitle_Favourites">Favourites</string>
     <string name="navTitle_Home">Home</string>
+    <string name="navTitle_Contact">Contact Us</string>
     <string name="imageSearch_Date">Date:</string>
     <string name="imageSearch_URL">URL:</string>
     <string name="imageSearch_HDURL">HDURL:</string>
     <string name="imageSearch_SelectDate">Select Date</string>
     <string name="imageSearch_SearchImage">Search</string>
     <string name="imageSearch_SaveImage">Save Image</string>
+    <string name="contact_NameTextView">Enter full name:</string>
+    <string name="contact_EmailTextView">Enter email:</string>
+    <string name="contact_MessageTextView">Enter your message below:</string>
+    <string name="contact_NameEditText">John Doe</string>
+    <string name="contact_EmailEditText">example@email.com</string>
+    <string name="contact_MessageEditText">Your message goes here</string>
+    <string name="contact_SendEmailButton">SEND</string>
 </resources>

@@ -94,6 +94,11 @@ public class ToolbarActivity extends AppCompatActivity implements NavigationView
                 startActivity(intent);
                 break;
 
+            case R.id.goto_Contact:
+                intent = new Intent(this, ContactActivity.class);
+                startActivity(intent);
+                break;
+
             case R.id.help_Menu:
                 showHelpAlertDialog();
                 break;
@@ -119,6 +124,11 @@ public class ToolbarActivity extends AppCompatActivity implements NavigationView
 
             case R.id.goto_Home:
                 intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.goto_Contact:
+                intent = new Intent(this, ContactActivity.class);
                 startActivity(intent);
                 break;
 

@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.ContactsContract;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +37,7 @@ public class ImageSearchActivity extends ToolbarActivity
         setContentView(R.layout.activity_nav);
         findViewById(R.id.image_search_layout).setVisibility(View.VISIBLE);
 
+        // load toolbar
         loadToolbar(getString(R.string.navTitle_ImageSearch), VERSION);
 
         // Variables
@@ -42,6 +45,8 @@ public class ImageSearchActivity extends ToolbarActivity
         imageQuery = new ImageQuery();
         MyOpener myOpener = new MyOpener(this);
 
+        // Button click listeners
+        // Search for image
         Button searchButton = findViewById(R.id.imageSearch_SearchButtonView);
         searchButton.setOnClickListener( (click) -> {
             // get the date from the DatePicker and append it to the end of our url
@@ -49,12 +54,24 @@ public class ImageSearchActivity extends ToolbarActivity
             imageQuery.execute(url + dateString);
         } );
 
+        // Save image
         Button saveButton =  findViewById(R.id.imageSearch_SaveButtonView);
         saveButton.setOnClickListener( (click) -> {
             myOpener.insertData(imageQuery.title, imageQuery.description, imageQuery.date, imageQuery.hdURL, saveToInternalStorage(imageQuery.currentPicture));
             myOpener.close();
             Toast.makeText(this, SAVE_MESSAGE, Toast.LENGTH_LONG).show();
         } );
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        if (imageQuery.getStatus() == AsyncTask.Status.RUNNING)
+        {
+            imageQuery.cancel(true);
+        }
+        imageQuery = null;
+        super.onDestroy();
     }
 
     // Display DatePickerDialog fragment
@@ -110,6 +127,9 @@ public class ImageSearchActivity extends ToolbarActivity
         @Override
         protected String doInBackground(String... args)
         {
+            Looper.prepare();
+            //MainActivity activity = new MainActivity();
+            Context ctx = new ImageSearchActivity().getBaseContext();
            try
            {
                URL conURL = new URL(args[0]);

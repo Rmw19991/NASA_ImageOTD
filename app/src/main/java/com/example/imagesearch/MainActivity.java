@@ -22,6 +22,8 @@ import java.util.Scanner;
 public class MainActivity extends ToolbarActivity
 {
     public final static String VERSION = "v0.1";
+    private Query query;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,10 +40,27 @@ public class MainActivity extends ToolbarActivity
         Date date = new Date();
         String formattedDate = dateFormat.format(date);
 
-        String url = "https://api.nasa.gov/planetary/apod?api_key=DgPLcIlnmN0Cwrzcg3e9NraFaYLIDI68Ysc6Zh3d&date=";
+        // append date to the url to get image of the day
+        url = "https://api.nasa.gov/planetary/apod?api_key=DgPLcIlnmN0Cwrzcg3e9NraFaYLIDI68Ysc6Zh3d&date=" + formattedDate;
+    }
 
-        Query query = new Query();
-        query.execute(url + formattedDate); // append date to the url to get image of the day
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        query = new Query();
+        query.execute(url);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        if (query.getStatus() == AsyncTask.Status.RUNNING)
+        {
+            query.cancel(true);
+        }
+        query = null;
+        super.onDestroy();
     }
 
     private class Query extends AsyncTask<String, Integer, String>

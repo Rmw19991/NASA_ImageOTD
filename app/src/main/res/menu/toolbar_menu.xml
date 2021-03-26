@@ -25,11 +25,16 @@
             android:icon="@drawable/home_icon"
             app:showAsAction="ifRoom"/>
 
+        <item android:id="@+id/goto_Contact"
+            android:title="@string/toolbar_Contact"
+            android:icon="@drawable/contact_icon"
+            android:orderInCategory="100"
+            app:showAsAction="never"/>
+
         <item android:id="@+id/help_Menu"
             android:title="@string/toolbar_Help"
             android:icon="@drawable/help_icon"
-            android:orderInCategory="100"
-            app:showAsAction="never">
-        </item>
+            android:orderInCategory="125"
+            app:showAsAction="never"/>
     </group>
 </menu>
