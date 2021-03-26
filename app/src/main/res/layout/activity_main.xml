@@ -44,8 +44,10 @@
                 android:id="@+id/home_URLTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
                 android:layout_below="@+id/home_DateTextView"
                 android:autoLink="web"/>
+
 
             <ImageView
                 android:id="@+id/home_ImageView"
@@ -53,6 +55,7 @@
                 android:layout_height="250dp"
                 android:layout_below="@+id/home_URLTextView"
                 android:layout_centerHorizontal="true"/>
+
 
             <TextView
                 android:id="@+id/home_DescTextView"

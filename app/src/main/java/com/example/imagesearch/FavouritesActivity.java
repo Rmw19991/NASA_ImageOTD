@@ -1,6 +1,8 @@
 package com.example.imagesearch;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -99,40 +101,48 @@ public class FavouritesActivity extends ToolbarActivity
     // load data from the database
     private void loadDataFromDatabase()
     {
-        //connect to the database
-        MyOpener dbOpener = new MyOpener(this);
-        SQLiteDatabase db = dbOpener.getWritableDatabase();
-
-        // get all columns in the db
-        String [] columns = {MyOpener.COL_TITLE, MyOpener.COL_DESC, MyOpener.COL_DATE, MyOpener.COL_HDURL, MyOpener.COL_IMAGE_FILEPATH, MyOpener.COL_ID};
-        //query all the results from the database:
-        Cursor results = db.query(false, MyOpener.TABLE_NAME, columns, null, null, null, null, null, null);
-
-        //Now the results object has rows of results that match the query.
-        //find the column indices:
-        int titleColIndex = results.getColumnIndex(MyOpener.COL_TITLE);
-        int descColIndex = results.getColumnIndex(MyOpener.COL_DESC);
-        int dateColIndex = results.getColumnIndex(MyOpener.COL_DATE);
-        int hdURLColIndex = results.getColumnIndex(MyOpener.COL_HDURL);
-        int imgFilePathColIndex = results.getColumnIndex(MyOpener.COL_IMAGE_FILEPATH);
-        int idColIndex = results.getColumnIndex(MyOpener.COL_ID);
-
-        //iterate over the results, return true if there is a next item:
-        while(results.moveToNext())
+        // Accessing database from its own thread
+        new Thread()
         {
-            String title = results.getString(titleColIndex);
-            long id = results.getLong(idColIndex);
-            String desc = results.getString(descColIndex);
-            String date = results.getString(dateColIndex);
-            String hdURL = results.getString(hdURLColIndex);
-            String img_filepath = results.getString(imgFilePathColIndex);
+            @Override
+            public void run()
+            {
+                //connect to the database
+                MyOpener dbOpener = new MyOpener(FavouritesActivity.this);
+                SQLiteDatabase db = dbOpener.getWritableDatabase();
 
-            //add the new image object to the array list:
-            imageList.add(new ImageObject(title, desc, date, hdURL, img_filepath, id));
-        }
-        results.close();
-        db.close();
-        //At this point, the image array has loaded every row from the cursor.
+                // get all columns in the db
+                String [] columns = {MyOpener.COL_TITLE, MyOpener.COL_DESC, MyOpener.COL_DATE, MyOpener.COL_HDURL, MyOpener.COL_IMAGE_FILEPATH, MyOpener.COL_ID};
+                //query all the results from the database:
+                Cursor results = db.query(false, MyOpener.TABLE_NAME, columns, null, null, null, null, null, null);
+
+                //Now the results object has rows of results that match the query.
+                //find the column indices:
+                int titleColIndex = results.getColumnIndex(MyOpener.COL_TITLE);
+                int descColIndex = results.getColumnIndex(MyOpener.COL_DESC);
+                int dateColIndex = results.getColumnIndex(MyOpener.COL_DATE);
+                int hdURLColIndex = results.getColumnIndex(MyOpener.COL_HDURL);
+                int imgFilePathColIndex = results.getColumnIndex(MyOpener.COL_IMAGE_FILEPATH);
+                int idColIndex = results.getColumnIndex(MyOpener.COL_ID);
+
+                //iterate over the results, return true if there is a next item:
+                while(results.moveToNext())
+                {
+                    String title = results.getString(titleColIndex);
+                    long id = results.getLong(idColIndex);
+                    String desc = results.getString(descColIndex);
+                    String date = results.getString(dateColIndex);
+                    String hdURL = results.getString(hdURLColIndex);
+                    String img_filepath = results.getString(imgFilePathColIndex);
+
+                    //add the new image object to the array list:
+                    imageList.add(new ImageObject(title, desc, date, hdURL, img_filepath, id));
+                }
+                results.close();
+                db.close();
+                //At this point, the image array has loaded every row from the cursor.
+            }
+        }.start();
     }
 
     // load image from the phone's internal storage

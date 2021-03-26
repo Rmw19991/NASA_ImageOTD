@@ -121,7 +121,10 @@ public class MainActivity extends ToolbarActivity
                         }
                         catch (OutOfMemoryError e)
                         {
+                            // If file is too big, replace the image and set the TextView displaying
+                            // the file too big error to visible
                             Log.e("MemoryError", e.getMessage());
+                            currentPicture = BitmapFactory.decodeResource(getResources(), R.drawable.imagetoobig_icon);
                         }
                     }
                     FileOutputStream outputStream = openFileOutput(hdURL, Context.MODE_PRIVATE);
