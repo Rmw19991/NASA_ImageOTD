@@ -19,10 +19,10 @@
     <string name="imageSearch_SearchImage">Search</string>
     <string name="imageSearch_SaveImage">Save Image</string>
     <string name="contact_NameTextView">Enter full name:</string>
-    <string name="contact_EmailTextView">Enter email:</string>
+    <string name="contact_SubjectTextView">Enter subject:</string>
     <string name="contact_MessageTextView">Enter your message below:</string>
-    <string name="contact_NameEditText">John Doe</string>
-    <string name="contact_EmailEditText">example@email.com</string>
-    <string name="contact_MessageEditText">Your message goes here</string>
+    <string name="contact_NameEditText">name</string>
+    <string name="contact_SubjectEditText">subject</string>
+    <string name="contact_MessageEditText">your message goes here</string>
     <string name="contact_SendEmailButton">SEND</string>
 </resources>
