@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_marginTop="15dp"
-    android:layout_marginBottom="50dp"
-    android:layout_marginLeft="35dp"
-    android:layout_marginRight="35dp"
-    android:background="@drawable/listview_item_border">
+    android:layout_width="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:background="@drawable/listview_item_border">
 
-    <TextView
-        android:layout_marginTop="10dp"
-        android:id="@+id/list_TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:layout_centerHorizontal="true"/>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/list_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:layout_centerHorizontal="true"/>
 
-    <ImageView
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:id="@+id/list_ImageView"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
-        android:layout_below="@+id/list_TextView"
-        android:layout_centerHorizontal="true"/>
-</RelativeLayout>
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/list_ImageView"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_below="@+id/list_TextView"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+</LinearLayout>
