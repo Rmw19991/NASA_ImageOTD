@@ -53,17 +53,6 @@ public class MainActivity extends ToolbarActivity
         query.execute(url);
     }
 
-    @Override
-    public void onDestroy()
-    {
-        if (query.getStatus() == AsyncTask.Status.RUNNING)
-        {
-            query.cancel(true);
-        }
-        query = null;
-        super.onDestroy();
-    }
-
     private class Query extends AsyncTask<String, Integer, String>
     {
         String title;

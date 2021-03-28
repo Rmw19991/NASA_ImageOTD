@@ -61,17 +61,6 @@ public class ImageSearchActivity extends ToolbarActivity
         } );
     }
 
-    @Override
-    public void onDestroy()
-    {
-        if (imageQuery.getStatus() == AsyncTask.Status.RUNNING)
-        {
-            imageQuery.cancel(true);
-        }
-        imageQuery = null;
-        super.onDestroy();
-    }
-
     // Display DatePickerDialog fragment
     public void showDatePickerDialog(View v)
     {

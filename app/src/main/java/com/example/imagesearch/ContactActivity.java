@@ -1,13 +1,17 @@
 package com.example.imagesearch;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 public class ContactActivity extends ToolbarActivity
 {
     public final static String VERSION = "v0.1";
+    SharedPreferences prefs = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -19,10 +23,25 @@ public class ContactActivity extends ToolbarActivity
         // load toolbar
         loadToolbar(getString(R.string.navTitle_Contact), VERSION);
 
+        // Load the string saved in shared preferences
+        prefs = getSharedPreferences("Filename", Context.MODE_PRIVATE);
+        String savedName = prefs.getString("Name", "");
+
+        // Get and set the EditText to the user's name
+        EditText editText = findViewById(R.id.contact_NameEditText);
+        editText.setText(savedName);
+
+        // save users name on button click
+        Button button = findViewById(R.id.contact_SendButton);
+        button.setOnClickListener( (click) -> {
+            saveSharedPrefs(editText.getText().toString());
+            sendEmail();
+        });
+
     }
 
     // Signs in to the users Gmail account and sends an email
-    public void sendEmail(View v)
+    public void sendEmail()
     {
         EditText senderText = findViewById(R.id.contact_NameEditText);
         EditText messageText = findViewById(R.id.contact_MessageEditText);
@@ -38,5 +57,12 @@ public class ContactActivity extends ToolbarActivity
         emailIntent.putExtra(Intent.EXTRA_TEXT, "From: " + sender + "\n\n" + message);
 
         startActivity(Intent.createChooser(emailIntent, "GMAIL"));
+    }
+
+    private void saveSharedPrefs(String stringToSave)
+    {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("Name", stringToSave);
+        editor.apply();
     }
 }

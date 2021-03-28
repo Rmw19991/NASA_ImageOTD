@@ -60,11 +60,11 @@
         android:textColor="@android:color/white"/>
 
     <Button
+        android:id="@+id/contact_SendButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/contact_SendEmailButton"
         android:layout_margin="10dp"
-        android:textColor="@android:color/black"
-        android:onClick="sendEmail"/>
+        android:textColor="@android:color/black"/>
 
 </LinearLayout>
