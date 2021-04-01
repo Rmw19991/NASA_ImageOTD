@@ -97,7 +97,6 @@ public class MainActivity extends ToolbarActivity
                 // Store data from JSON object
                 title = jsonObject.getString("title");
                 date = jsonObject.getString("date");
-                hdURL = jsonObject.getString("hdurl");
                 desc = jsonObject.getString("explanation");
                /* Some images do not contain a hdurl so this statement
                checks the jsonObject to see if it has one */

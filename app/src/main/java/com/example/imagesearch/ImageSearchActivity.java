@@ -25,8 +25,14 @@ public class ImageSearchActivity extends ToolbarActivity
     public final static String VERSION = "v0.1";
     public final static String SAVE_MESSAGE = "Image Saved!";
     private String dateString;
-    ImageQuery imageQuery;
     DatePickerFragment datePickerFragment = new DatePickerFragment();
+
+    String imageTitle;
+    String imageDesc;
+    String imageDate;
+    String imageURL;
+    String imageHDURL;
+    Bitmap imageCurrentPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,7 +46,7 @@ public class ImageSearchActivity extends ToolbarActivity
 
         // Variables
         String url = "https://api.nasa.gov/planetary/apod?api_key=DgPLcIlnmN0Cwrzcg3e9NraFaYLIDI68Ysc6Zh3d&date=";
-        imageQuery = new ImageQuery();
+        //imageQuery = new ImageQuery();
         MyOpener myOpener = new MyOpener(this);
 
         // Button click listeners
@@ -48,14 +54,15 @@ public class ImageSearchActivity extends ToolbarActivity
         Button searchButton = findViewById(R.id.imageSearch_SearchButtonView);
         searchButton.setOnClickListener( (click) -> {
             // get the date from the DatePicker and append it to the end of our url
-            dateString = datePickerFragment.getDateString();
-            imageQuery.execute(url + dateString);
+           dateString = datePickerFragment.getDateString();
+           // Create new instance of the query each time it's executed because ASyncTask can only be executed once
+            new ImageQuery().execute(url + dateString);
         } );
 
         // Save image
         Button saveButton =  findViewById(R.id.imageSearch_SaveButtonView);
         saveButton.setOnClickListener( (click) -> {
-            myOpener.insertData(imageQuery.title, imageQuery.description, imageQuery.date, imageQuery.hdURL, saveToInternalStorage(imageQuery.currentPicture));
+            myOpener.insertData(imageTitle, imageDesc, imageDate, imageHDURL, saveToInternalStorage(imageCurrentPicture));
             myOpener.close();
             Toast.makeText(this, SAVE_MESSAGE, Toast.LENGTH_LONG).show();
         } );
@@ -75,7 +82,7 @@ public class ImageSearchActivity extends ToolbarActivity
         // path to /data/data/your_app/app_data/imageDir
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         // Create imageDir
-        File myPath = new File(directory,imageQuery.title);
+        File myPath = new File(directory, imageTitle);
 
         FileOutputStream fos = null;
         try
@@ -173,8 +180,19 @@ public class ImageSearchActivity extends ToolbarActivity
                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                    connection.connect();
                    int responseCode = connection.getResponseCode();
-                   if (responseCode == 200) {
-                       currentPicture = BitmapFactory.decodeStream(connection.getInputStream());
+                   if (responseCode == 200)
+                   {
+                       try
+                       {
+                           currentPicture = BitmapFactory.decodeStream(connection.getInputStream());
+                       }
+                       catch (OutOfMemoryError e)
+                       {
+                           // If file is too big, replace the image and set the TextView displaying
+                           // the file too big error to visible
+                           Log.e("MemoryError", e.getMessage());
+                           currentPicture = BitmapFactory.decodeResource(getResources(), R.drawable.imagetoobig_icon);
+                       }
                    }
 
                    FileOutputStream outputStream = openFileOutput(hdURL, Context.MODE_PRIVATE);
@@ -210,6 +228,13 @@ public class ImageSearchActivity extends ToolbarActivity
             textView3.setText(hdURLString);
             textView3.setMovementMethod(LinkMovementMethod.getInstance());
             textView3.setVisibility(View.VISIBLE);
+
+            imageTitle = title;
+            imageDate = date;
+            imageDesc = description;
+            imageURL = url;
+            imageHDURL = hdURL;
+            imageCurrentPicture = currentPicture;
         }
     }
 }
