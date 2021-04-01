@@ -25,14 +25,13 @@ public class ImageSearchActivity extends ToolbarActivity
     public final static String VERSION = "v0.1";
     public final static String SAVE_MESSAGE = "Image Saved!";
     private String dateString;
-    DatePickerFragment datePickerFragment = new DatePickerFragment();
+    private String imageTitle;
+    private String imageDesc;
+    private String imageDate;
+    private String imageHDURL;
+    private Bitmap imageCurrentPicture;
 
-    String imageTitle;
-    String imageDesc;
-    String imageDate;
-    String imageURL;
-    String imageHDURL;
-    Bitmap imageCurrentPicture;
+    DatePickerFragment datePickerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,6 +39,8 @@ public class ImageSearchActivity extends ToolbarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
         findViewById(R.id.image_search_layout).setVisibility(View.VISIBLE);
+
+        datePickerFragment = new DatePickerFragment();
 
         // load toolbar
         loadToolbar(getString(R.string.navTitle_ImageSearch), VERSION);
@@ -232,7 +233,6 @@ public class ImageSearchActivity extends ToolbarActivity
             imageTitle = title;
             imageDate = date;
             imageDesc = description;
-            imageURL = url;
             imageHDURL = hdURL;
             imageCurrentPicture = currentPicture;
         }
