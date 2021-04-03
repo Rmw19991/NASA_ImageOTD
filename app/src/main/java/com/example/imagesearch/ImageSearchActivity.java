@@ -194,8 +194,8 @@ public class ImageSearchActivity extends ToolbarActivity
                        }
                        catch (OutOfMemoryError e)
                        {
-                           // If file is too big, replace the image and set the TextView displaying
-                           // the file too big error to visible
+                           // If you've run out of memory to download / display the image
+                           // a default image will be displayed instead
                            Log.e("MemoryError", e.getMessage());
                            currentPicture = BitmapFactory.decodeResource(getResources(), R.drawable.imagetoobig_icon);
                        }
