@@ -1,8 +1,6 @@
 package com.example.imagesearch;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;

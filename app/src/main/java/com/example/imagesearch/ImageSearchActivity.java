@@ -33,6 +33,11 @@ public class ImageSearchActivity extends ToolbarActivity
 
     DatePickerFragment datePickerFragment;
 
+    public ImageSearchActivity()
+    {
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
