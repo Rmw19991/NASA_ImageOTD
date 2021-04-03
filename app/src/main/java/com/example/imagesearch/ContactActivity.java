@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 public class ContactActivity extends ToolbarActivity
 {
-    public final static String VERSION = "v0.1";
+    public final static String VERSION = "v0.1"; // Apps version #. displayed in the NavDrawer
     SharedPreferences prefs = null;
 
     @Override

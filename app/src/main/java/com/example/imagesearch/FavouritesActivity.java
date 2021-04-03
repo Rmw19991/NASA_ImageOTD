@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class FavouritesActivity extends ToolbarActivity
 {
-    public final static String VERSION = "v0.1";
+    public final static String VERSION = "v0.1"; // Apps version #. displayed in the NavDrawer
     private ListView myList;
     private MyAdapter adapter;
 

@@ -22,8 +22,10 @@ import java.util.Scanner;
 
 public class ImageSearchActivity extends ToolbarActivity
 {
-    public final static String VERSION = "v0.1";
-    public final static String SAVE_MESSAGE = "Image Saved!";
+    public final static String VERSION = "v0.1"; // Apps version #. displayed in the NavDrawer
+    public final static String SAVE_MESSAGE = "Image Saved!"; // Message for Toast to display
+
+    // variables to hold image details
     private String dateString;
     private String imageTitle;
     private String imageDesc;
@@ -31,6 +33,7 @@ public class ImageSearchActivity extends ToolbarActivity
     private String imageHDURL;
     private Bitmap imageCurrentPicture;
 
+    // Creating datePickerFragment object
     DatePickerFragment datePickerFragment;
 
     public ImageSearchActivity()
@@ -117,6 +120,7 @@ public class ImageSearchActivity extends ToolbarActivity
 
     private class ImageQuery extends AsyncTask<String, Integer, String>
     {
+        // holds image details
         String title;
         String description;
         String date;

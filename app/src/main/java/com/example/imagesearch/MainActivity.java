@@ -22,9 +22,9 @@ import java.util.Scanner;
 
 public class MainActivity extends ToolbarActivity
 {
-    public final static String VERSION = "v0.1";
-    private Query query;
-    private String url;
+    public final static String VERSION = "v0.1"; // Apps version #. displayed in the NavDrawer
+    private Query query; // create query object to execute query
+    private String url; // url used in query's execute statement
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
