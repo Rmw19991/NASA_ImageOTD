@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:id="@+id/tb_menu">
+
+
+    <group>
+        <item android:id="@+id/goto_ImageSearch"
+            android:icon="@drawable/search_icon"
+            android:title="@string/toolbar_ImageSearch"
+            android:orderInCategory="25"
+            app:showAsAction="ifRoom"/>
+
+        <item android:id="@+id/goto_FavouritesPage"
+            android:title="@string/toolbar_Favourites"
+            android:icon="@drawable/fav_icon"
+            android:orderInCategory="50"
+            app:showAsAction="ifRoom"/>
+
+        <item android:id="@+id/goto_Home"
+            android:title="@string/toolbar_Home"
+            android:orderInCategory="75"
+            android:icon="@drawable/home_icon"
+            app:showAsAction="ifRoom"/>
+
+        <item android:id="@+id/goto_Contact"
+            android:title="@string/toolbar_Contact"
+            android:icon="@drawable/contact_icon"
+            android:orderInCategory="100"
+            app:showAsAction="never"/>
+
+        <item android:id="@+id/help_Menu"
+            android:title="@string/toolbar_Help"
+            android:icon="@drawable/help_icon"
+            android:orderInCategory="125"
+            app:showAsAction="never"/>
+    </group>
+</menu>
