@@ -3,7 +3,6 @@ package com.example.imagesearch;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,8 +22,6 @@ import java.util.Scanner;
 public class MainActivity extends ToolbarActivity
 {
     public final static String VERSION = "v0.1"; // Apps version #. displayed in the NavDrawer
-    private Query query; // create query object to execute query
-    private String url; // url used in query's execute statement
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,98 +39,101 @@ public class MainActivity extends ToolbarActivity
         String formattedDate = dateFormat.format(date);
 
         // append date to the url to get image of the day
-        url = "https://api.nasa.gov/planetary/apod?api_key=DgPLcIlnmN0Cwrzcg3e9NraFaYLIDI68Ysc6Zh3d&date=" + formattedDate;
+        String url = "https://api.nasa.gov/planetary/apod?api_key=DgPLcIlnmN0Cwrzcg3e9NraFaYLIDI68Ysc6Zh3d&date=" + formattedDate;
+        Query query = new Query();
+        //query.fetchJsonData(url);
+        query.executeQuery(url);
     }
 
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        query = new Query();
-        query.execute(url);
-    }
-
-    private class Query extends AsyncTask<String, Integer, String>
+    private class Query
     {
         String title;
         String date;
         String hdURL;
         String desc;
         Bitmap currentPicture;
-        ProgressBar progressBar;
+        ProgressBar progressBar = findViewById(R.id.main_ProgressBar);
 
-        @Override
-        protected String doInBackground(String... args)
+        private void executeQuery(String api_Url)
+        {
+            StringBuilder jsonData = new StringBuilder();
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        // progressbar
+                        URL conURL = new URL(api_Url);
+
+                        // Open the connection
+                        HttpURLConnection urlConnection = (HttpURLConnection) conURL.openConnection();
+
+                        // Verify the response code and store the contents of the JSON object in a StringBuilder object
+                        int responseCode = urlConnection.getResponseCode();
+                        if (responseCode != 200) {
+                            throw new RuntimeException("HttpResponseCode: " + responseCode);
+                        } else {
+                            Scanner sc = new Scanner(conURL.openStream());
+                            while (sc.hasNext()) {
+                                jsonData.append(sc.nextLine());
+                            }
+                            sc.close();
+                            progressBar.setProgress(25);
+                        }
+                    } catch (Exception e) {
+                        //Log.e("ERROR", e.getMessage());
+                    }
+                    saveJsonData(jsonData.toString());
+                    fetchImage();
+
+                    // Update View
+                   final Runnable runnable = () -> onPostExecute();
+                   runOnUiThread(runnable);
+                   progressBar.setProgress(100);
+                }
+            }.start();
+        }
+
+        private void saveJsonData(String jsonData)
         {
             try
             {
-                progressBar = findViewById(R.id.main_ProgressBar);
-                URL conURL = new URL(args[0]);
-
-                // Open the connection
-                HttpURLConnection urlConnection = (HttpURLConnection) conURL.openConnection();
-
-                // Verify the response code and store the contents of the JSON object in a string
-                String inline = "";
-                int responseCode = urlConnection.getResponseCode();
-                if (responseCode != 200)
-                {
-                    throw new RuntimeException("HttpResponseCode: " + responseCode);
-                }
-                else
-                {
-                    Scanner sc = new Scanner(conURL.openStream());
-                    while(sc.hasNext())
-                    {
-                        inline+=sc.nextLine();
-                    }
-                    sc.close();
-                    progressBar.setProgress(25);
-                }
-
                 // Create a JSON object using the string that holds the JSON data
-                JSONObject jsonObject = new JSONObject(inline);
+                JSONObject jsonObject = new JSONObject(jsonData);
 
-                // Store data from JSON object
-                title = jsonObject.getString("title");
-                date = jsonObject.getString("date");
-                desc = jsonObject.getString("explanation");
-               /* Some images do not contain a hdurl so this statement
-               checks the jsonObject to see if it has one */
-                if (jsonObject.has("hdurl"))
-                {
-                    hdURL = jsonObject.getString("hdurl");
-                }
-                else
+                if (!jsonObject.has("hdurl")) //Some images do not contain a hdurl so check the jsonObject to see if it has one
                 {
                     hdURL = null;
                 }
+                // Store title, date, and description data from the JSON object
+                title = jsonObject.getString("title");
+                date = jsonObject.getString("date");
+                desc = jsonObject.getString("explanation");
+                hdURL = jsonObject.getString("hdurl");
             }
             catch (Exception e)
             {
-                Log.e("ERROR", e.getMessage());
+                Log.e("Error2", e.getMessage());
             }
+        }
 
+        private void fetchImage()
+        {
             progressBar.setProgress(50);
             // If the hdurl is not null the program will retrieve the image
-            if (hdURL != null)
-            {
-                try
-                {
+            if (hdURL == null) {
+                hdURL = "Cannot provide HDURL";
+            } else {
+                try {
                     // Getting current picture
                     URL url = new URL(hdURL);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.connect();
                     int responseCode = connection.getResponseCode();
-                    if (responseCode == 200)
-                    {
-                        try
-                        {
+                    if (responseCode == 200) {
+                        try {
                             currentPicture = BitmapFactory.decodeStream(connection.getInputStream());
                             progressBar.setProgress(75);
-                        }
-                        catch (OutOfMemoryError e)
-                        {
+                        } catch (OutOfMemoryError e) {
                             // If file is too big, replace the image and set the TextView displaying
                             // the file too big error to visible
                             Log.e("MemoryError", e.getMessage());
@@ -145,21 +145,14 @@ public class MainActivity extends ToolbarActivity
                     outputStream.flush();
                     outputStream.close();
 
-                }
-                catch (Exception e)
-                {
-                    Log.e("Error", e.getMessage());
+                } catch (Exception e) {
+                    Log.e("Error1", e.getMessage());
                 }
             }
-            else
-            {
-                hdURL = "Cannot provide HDURL";
-            }
-            progressBar.setProgress(100);
-            return "Done";
+
         }
 
-        public void onPostExecute(String fromdoInBackground)
+        private void onPostExecute()
         {
             ImageView imageView = findViewById(R.id.home_ImageView);
             TextView titleTextView = findViewById(R.id.home_TitleTextView);
