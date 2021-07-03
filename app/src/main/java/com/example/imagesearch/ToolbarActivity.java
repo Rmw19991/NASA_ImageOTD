@@ -7,11 +7,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Choreographer;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 import com.google.android.material.navigation.NavigationView;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 public class ToolbarActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
@@ -44,6 +49,9 @@ public class ToolbarActivity extends AppCompatActivity implements NavigationView
         TextView navHeaderVersion = nvDrawer.getHeaderView(0).findViewById(R.id.navHeader_Version);
         navHeaderTitle.setText(title);
         navHeaderVersion.setText(version);
+
+
+        reduceChoreographerSkippedFramesWarningThreshold();
     }
 
     // Displays an AlertDialog when the help menu item is clicked
@@ -62,6 +70,20 @@ public class ToolbarActivity extends AppCompatActivity implements NavigationView
                 // Yes Button
                 .setPositiveButton("OK", (click, arg) -> { })
                 .create().show();
+    }
+
+    private void reduceChoreographerSkippedFramesWarningThreshold() {
+        if (BuildConfig.DEBUG) {
+            Field field = null;
+            try {
+                field = Choreographer.class.getDeclaredField("SKIPPED_FRAME_WARNING_LIMIT");
+                field.setAccessible(true);
+                field.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+                field.set(null, 5);
+            } catch (Throwable e) {
+                Log.e("ERROR3", "Failed to change choreographer's skipped frames threshold");
+            }
+        }
     }
 
     @Override

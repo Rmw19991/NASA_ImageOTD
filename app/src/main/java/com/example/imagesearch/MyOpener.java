@@ -54,21 +54,27 @@ public class MyOpener extends SQLiteOpenHelper
 
     public void insertData(String title, String desc, String date, String hdURL, String img_filepath)
     {
-        // add the data to the database
-        db = getWritableDatabase();
-        ContentValues newRowValues = new ContentValues();
+        new Thread()
+        {
+            @Override
+            public void run()
+            {
+                // add the data to the database
+                db = getWritableDatabase();
+                ContentValues newRowValues = new ContentValues();
+                // insert the values into the database columns
+                newRowValues.put(MyOpener.COL_TITLE, title);
+                newRowValues.put(MyOpener.COL_DESC, desc);
+                newRowValues.put(MyOpener.COL_DATE, date);
+                newRowValues.put(MyOpener.COL_HDURL, hdURL);
+                newRowValues.put(MyOpener.COL_IMAGE_FILEPATH, img_filepath);
+                db.insert(MyOpener.TABLE_NAME, null, newRowValues);
 
-        // insert the values into the database columns
-        newRowValues.put(MyOpener.COL_TITLE, title);
-        newRowValues.put(MyOpener.COL_DESC, desc);
-        newRowValues.put(MyOpener.COL_DATE, date);
-        newRowValues.put(MyOpener.COL_HDURL, hdURL);
-        newRowValues.put(MyOpener.COL_IMAGE_FILEPATH, img_filepath);
-        db.insert(MyOpener.TABLE_NAME, null, newRowValues);
-
-        System.out.println("DATA INSERTED");
-        System.out.println(title + " " + desc + " " + date + " " + img_filepath);
-        db.close();
+                System.out.println("DATA INSERTED");
+                System.out.println(title + " " + desc + " " + date + " " + img_filepath);
+                db.close();
+            }
+        }.start();
     }
 
     public void deleteData(ImageObject imageObject)
