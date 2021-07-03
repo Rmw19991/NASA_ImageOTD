@@ -16,8 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class FavouritesActivity extends ToolbarActivity
@@ -144,45 +142,41 @@ public class FavouritesActivity extends ToolbarActivity
     }
 
     // load image from the phone's internal storage
-    private Bitmap loadImageFromStorage(String path, String filename)
-    {
-        Bitmap b = null;
-
+    private Bitmap loadImageFromStorage(String path, String filename) {
+        Bitmap image;
+        File f = new File(path, filename);
         try {
-            File f = new File(path, filename);
-            try
-            {
-                b = BitmapFactory.decodeStream(new FileInputStream(f));
-            }
-            catch (OutOfMemoryError e)
-            {
-                Log.e("MemoryError", e.getMessage());
-            }
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 8;
+            image = BitmapFactory.decodeFile(f.toString(), options); // reduce bitmap memory usage
+        } catch (OutOfMemoryError e) {
+            Log.e("MemoryError", e.getMessage());
+            image = null;
         }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        return b;
+        return image;
     }
 
-    private class MyAdapter extends BaseAdapter
-    {
+    private class MyAdapter extends BaseAdapter {
+        private View newView;
 
-        public int getCount() { return imageList.size(); }
+        public int getCount() {
+            return imageList.size();
+        }
 
-        public ImageObject getItem(int position) { return imageList.get(position); }
+        public ImageObject getItem(int position) {
+            return imageList.get(position);
+        }
 
-        public long getItemId(int position) { return getItem(position).getId(); }
+        public long getItemId(int position) {
+            return getItem(position).getId();
+        }
 
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
+        public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
             View row = convertView;
             LayoutInflater inflater = getLayoutInflater();
 
-            if (convertView == null)
-            {
+            if (convertView == null) {
                 row = inflater.inflate(R.layout.listview_items, parent, false);
                 viewHolder = new ViewHolder();
                 viewHolder.textView = row.findViewById(R.id.list_TextView);
@@ -190,9 +184,7 @@ public class FavouritesActivity extends ToolbarActivity
 
                 // store the ViewHolder in the View
                 row.setTag(viewHolder);
-            }
-            else
-            {
+            } else {
                 // instead of having to call findViewById() on every resource
                 // just use the ViewHolder
                 viewHolder = (ViewHolder) row.getTag();
@@ -200,8 +192,8 @@ public class FavouritesActivity extends ToolbarActivity
 
             viewHolder.textView.setText(getItem(position).getTitle());
             viewHolder.imageView.setImageBitmap(loadImageFromStorage(getItem(position).getImg_filepath(), getItem(position).getTitle()));
-
-            return row;
+            newView = row;
+            return newView;
         }
     }
 

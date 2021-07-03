@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,16 +24,14 @@ public class ImageSearchActivity extends ToolbarActivity
     public final static String VERSION = "v0.1"; // Apps version #. displayed in the NavDrawer
     public final static String SAVE_MESSAGE = "Image Saved!"; // Message for Toast to display
 
-    // variables to hold image details
+    // image details
     private String dateString;
     private String imageTitle;
     private String imageDesc;
     private String imageDate;
     private String imageHDURL;
     private Bitmap imageCurrentPicture;
-
-    // Creating datePickerFragment object
-    DatePickerFragment datePickerFragment;
+    private DatePickerFragment datePickerFragment;
 
     public ImageSearchActivity()
     {
@@ -48,39 +45,30 @@ public class ImageSearchActivity extends ToolbarActivity
         setContentView(R.layout.activity_nav);
         findViewById(R.id.image_search_layout).setVisibility(View.VISIBLE);
 
-        datePickerFragment = new DatePickerFragment();
-
         // load toolbar
         loadToolbar(getString(R.string.navTitle_ImageSearch), VERSION);
-
-        // Variables
-        String url = "https://api.nasa.gov/planetary/apod?api_key=DgPLcIlnmN0Cwrzcg3e9NraFaYLIDI68Ysc6Zh3d&date=";
-        //imageQuery = new ImageQuery();
-        MyOpener myOpener = new MyOpener(this);
-
-        // Button click listeners
-        // Search for image
-        Button searchButton = findViewById(R.id.imageSearch_SearchButtonView);
-        searchButton.setOnClickListener( (click) -> {
-            // get the date from the DatePicker and append it to the end of our url
-           dateString = datePickerFragment.getDateString();
-           // Create new instance of the query each time it's executed because ASyncTask can only be executed once
-            new ImageQuery().execute(url + dateString);
-        } );
-
-        // Save image
-        Button saveButton =  findViewById(R.id.imageSearch_SaveButtonView);
-        saveButton.setOnClickListener( (click) -> {
-            myOpener.insertData(imageTitle, imageDesc, imageDate, imageHDURL, saveToInternalStorage(imageCurrentPicture));
-            myOpener.close();
-            Toast.makeText(this, SAVE_MESSAGE, Toast.LENGTH_LONG).show();
-        } );
     }
 
     // Display DatePickerDialog fragment
     public void showDatePickerDialog(View v)
     {
+        datePickerFragment = new DatePickerFragment();
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void searchImage(View v)
+    {
+        String url = "https://api.nasa.gov/planetary/apod?api_key=DgPLcIlnmN0Cwrzcg3e9NraFaYLIDI68Ysc6Zh3d&date=";
+        dateString = url + datePickerFragment.getDateString();
+        new ImageQuery().executeQuery(dateString);
+    }
+
+    public void saveToFavourites(View v)
+    {
+        MyOpener myOpener = new MyOpener(this);
+        myOpener.insertData(imageTitle, imageDesc, imageDate, imageHDURL, saveToInternalStorage(imageCurrentPicture));
+        myOpener.close();
+        Toast.makeText(this, SAVE_MESSAGE, Toast.LENGTH_LONG).show();
     }
 
     // Saves the image to the phones internal storage
@@ -118,7 +106,8 @@ public class ImageSearchActivity extends ToolbarActivity
         return directory.getAbsolutePath();
     }
 
-    private class ImageQuery extends AsyncTask<String, Integer, String>
+
+    private class ImageQuery
     {
         // holds image details
         String title;
@@ -128,102 +117,90 @@ public class ImageSearchActivity extends ToolbarActivity
         String hdURL;
         Bitmap currentPicture;
 
-        @Override
-        protected String doInBackground(String... args)
-        {
-           try
-           {
-               URL conURL = new URL(args[0]);
+        private void executeQuery(String api_Url) {
+            new Thread() {
+                @Override
+                public void run() {
+                    StringBuilder jsonData = new StringBuilder();
+                    try {
+                        URL conURL = new URL(api_Url);
 
-               // Open the connection
-               HttpURLConnection urlConnection = (HttpURLConnection) conURL.openConnection();
+                        // Open the connection
+                        HttpURLConnection urlConnection = (HttpURLConnection) conURL.openConnection();
+                        // Verify the response code and store the contents of the JSON object in a string
+                        int responseCode = urlConnection.getResponseCode();
+                        if (responseCode != 200) {
+                            throw new RuntimeException("HttpResponseCode: " + responseCode);
+                        } else {
+                            Scanner sc = new Scanner(conURL.openStream());
+                            while (sc.hasNext()) {
+                                jsonData.append(sc.nextLine());
+                            }
+                            sc.close();
+                        }
+                        saveJsonData(jsonData.toString());
+                        fetchImage();
+                    } catch (Exception e) {
+                        System.err.println(e.toString());
+                    }
 
-               // Verify the response code and store the contents of the JSON object in a string
-               String inline = "";
-               int responseCode = urlConnection.getResponseCode();
-               if (responseCode != 200)
-               {
-                   throw new RuntimeException("HttpResponseCode: " + responseCode);
-               }
-               else
-               {
-                   Scanner sc = new Scanner(conURL.openStream());
-                   while(sc.hasNext())
-                   {
-                       inline+=sc.nextLine();
-                   }
-                   sc.close();
-               }
-
-               // Create a JSON object using the string that holds the JSON data
-               JSONObject jsonObject = new JSONObject(inline);
-
-               // Store data from JSON object
-               title = jsonObject.getString("title");
-               description = jsonObject.getString("explanation");
-               date = jsonObject.getString("date");
-               url = jsonObject.getString("url");
-
-               /* Some images do not contain a hdurl so this statement
-               checks the jsonObject to see if it has one */
-               if (jsonObject.has("hdurl"))
-               {
-                   hdURL = jsonObject.getString("hdurl");
-               }
-               else
-               {
-                   hdURL = null;
-               }
-           }
-           catch (Exception e)
-           {
-               Log.e("Error", e.getMessage());
-           }
-
-           // If the hdurl is not null the program will retrieve the image
-           if (hdURL != null)
-           {
-               try
-               {
-                   // Getting current picture
-                   URL url = new URL(hdURL);
-                   HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                   connection.connect();
-                   int responseCode = connection.getResponseCode();
-                   if (responseCode == 200)
-                   {
-                       try
-                       {
-                           currentPicture = BitmapFactory.decodeStream(connection.getInputStream());
-                       }
-                       catch (OutOfMemoryError e)
-                       {
-                           // If you've run out of memory to download / display the image
-                           // a default image will be displayed instead
-                           Log.e("MemoryError", e.getMessage());
-                           currentPicture = BitmapFactory.decodeResource(getResources(), R.drawable.imagetoobig_icon);
-                       }
-                   }
-
-                   FileOutputStream outputStream = openFileOutput(hdURL, Context.MODE_PRIVATE);
-                   currentPicture.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
-                   outputStream.flush();
-                   outputStream.close();
-               }
-               catch (Exception e)
-               {
-                   Log.e("Error", e.getMessage());
-               }
-           }
-           else
-           {
-               hdURL = "Cannot provide HDURL";
-           }
-
-           return "Done";
+                    // Update View
+                    final Runnable runnable = () -> onPostExecute();
+                    runOnUiThread(runnable);
+                }
+            }.start();
         }
 
-        public void onPostExecute(String fromdoInBackground)
+        private void saveJsonData(String jsonData) throws JSONException {
+            // Create a JSON object using the string that holds the JSON data
+            JSONObject jsonObject = new JSONObject(jsonData);
+
+            // Store data from JSON object
+            title = jsonObject.getString("title");
+            description = jsonObject.getString("explanation");
+            date = jsonObject.getString("date");
+            url = jsonObject.getString("url");
+
+                        /* Some images do not contain a hdurl so this statement
+                           checks the jsonObject to see if it has one */
+            if (jsonObject.has("hdurl")) {
+                hdURL = jsonObject.getString("hdurl");
+            } else {
+                hdURL = null;
+            }
+        }
+
+        private void fetchImage() {
+            // If the hdurl is not null the program will retrieve the image
+            if (hdURL == null) {
+                hdURL = "Cannot provide HDURL";
+            } else {
+
+                try {
+                    // Getting current picture
+                    URL url = new URL(hdURL);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.connect();
+
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == 200) {
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inSampleSize = 8;
+                        currentPicture = BitmapFactory.decodeStream(connection.getInputStream(), new Rect(), options); // reduces bitmap memory usage
+                    }
+
+                    FileOutputStream outputStream = openFileOutput(hdURL, Context.MODE_PRIVATE);
+                    currentPicture.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
+                    outputStream.flush();
+                    outputStream.close();
+
+                } catch (Exception e) {
+                    System.err.println(e.toString());
+                }
+            }
+        }
+
+        private void onPostExecute()
         {
             String dateString = getString(R.string.imageSearch_Date) + " " + date;
             String urlString = getString(R.string.imageSearch_URL) + " " + url;

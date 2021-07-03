@@ -3,8 +3,8 @@ package com.example.imagesearch;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -56,10 +56,10 @@ public class MainActivity extends ToolbarActivity
 
         private void executeQuery(String api_Url)
         {
-            StringBuilder jsonData = new StringBuilder();
             new Thread() {
                 @Override
                 public void run() {
+                    StringBuilder jsonData = new StringBuilder();
                     try {
                         // progressbar
                         URL conURL = new URL(api_Url);
@@ -68,6 +68,7 @@ public class MainActivity extends ToolbarActivity
                         HttpURLConnection urlConnection = (HttpURLConnection) conURL.openConnection();
 
                         // Verify the response code and store the contents of the JSON object in a StringBuilder object
+
                         int responseCode = urlConnection.getResponseCode();
                         if (responseCode != 200) {
                             throw new RuntimeException("HttpResponseCode: " + responseCode);
@@ -88,7 +89,7 @@ public class MainActivity extends ToolbarActivity
                     // Update View
                    final Runnable runnable = () -> onPostExecute();
                    runOnUiThread(runnable);
-                   progressBar.setProgress(100);
+                    progressBar.setProgress(100);
                 }
             }.start();
         }
@@ -112,44 +113,40 @@ public class MainActivity extends ToolbarActivity
             }
             catch (Exception e)
             {
-                Log.e("Error2", e.getMessage());
+                System.err.println(e.toString());
             }
+            progressBar.setProgress(50);
         }
 
-        private void fetchImage()
-        {
-            progressBar.setProgress(50);
+        private void fetchImage() {
             // If the hdurl is not null the program will retrieve the image
             if (hdURL == null) {
                 hdURL = "Cannot provide HDURL";
+
             } else {
                 try {
                     // Getting current picture
                     URL url = new URL(hdURL);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.connect();
+
                     int responseCode = connection.getResponseCode();
                     if (responseCode == 200) {
-                        try {
-                            currentPicture = BitmapFactory.decodeStream(connection.getInputStream());
-                            progressBar.setProgress(75);
-                        } catch (OutOfMemoryError e) {
-                            // If file is too big, replace the image and set the TextView displaying
-                            // the file too big error to visible
-                            Log.e("MemoryError", e.getMessage());
-                            currentPicture = BitmapFactory.decodeResource(getResources(), R.drawable.imagetoobig_icon);
-                        }
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inSampleSize = 8;
+                        currentPicture = BitmapFactory.decodeStream(connection.getInputStream(), new Rect(), options); // reduces bitmap memory usage
                     }
+
                     FileOutputStream outputStream = openFileOutput(hdURL, Context.MODE_PRIVATE);
                     currentPicture.compress(Bitmap.CompressFormat.JPEG, 30, outputStream);
                     outputStream.flush();
                     outputStream.close();
 
                 } catch (Exception e) {
-                    Log.e("Error1", e.getMessage());
+                    System.err.println(e.toString());
                 }
             }
-
+            progressBar.setProgress(75);
         }
 
         private void onPostExecute()
