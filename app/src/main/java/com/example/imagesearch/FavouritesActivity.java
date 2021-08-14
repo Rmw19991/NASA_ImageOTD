@@ -32,17 +32,11 @@ public class FavouritesActivity extends ToolbarActivity
         setContentView(R.layout.activity_nav);
         findViewById(R.id.favourites_layout).setVisibility(View.VISIBLE);
 
-        // load data from database
         loadDataFromDatabase();
-
-        // load toolbar & nav
         loadToolbar(getString(R.string.navTitle_Favourites), VERSION);
 
-        // Temporary SnackBar message that will be displayed after sign in
-        //View activity_favourites = findViewById(R.id.activity_favourites_layout);
         Snackbar.make(findViewById(R.id.drawer_layout), "This is your favourites page!", Snackbar.LENGTH_LONG).show();
 
-        // Initializing variables
         myList = findViewById(R.id.favourites_ListView);
 
         // Set adapter for ListView
@@ -61,24 +55,21 @@ public class FavouritesActivity extends ToolbarActivity
         });
     }
 
-    // Displays alert dialog for the ListView's on item click listener
     private void showAlertDialog(int position)
     {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle(imageList.get(position).getTitle())
                 .setMessage(imageList.get(position).getDate() + "\n" + imageList.get(position).getHdURL()
                         + "\n\n" + imageList.get(position).getDesc())
-                // Ok Button
+
                 .setPositiveButton("OK", (click, arg) -> { })
                 .create().show();
     }
 
-    // Displays an alert dialog that gives the user the option to delete images
     private void showDeleteAlertDialog(int position)
     {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Would you like to delete this image?")
-                // Yes button
                 .setPositiveButton("Yes", (click, arg) -> {
                     MyOpener myOpener = new MyOpener(this);
 
@@ -89,31 +80,24 @@ public class FavouritesActivity extends ToolbarActivity
                     myList.setAdapter(adapter);
                     myOpener.close();
                 })
-                // No button
+
                 .setNegativeButton("No", (click, arg) -> { })
                 .create().show();
     }
 
-    // load data from the database
     private void loadDataFromDatabase()
     {
-        // Accessing database from its own thread
         new Thread()
         {
             @Override
             public void run()
             {
-                //connect to the database
                 MyOpener dbOpener = new MyOpener(FavouritesActivity.this);
                 SQLiteDatabase db = dbOpener.getWritableDatabase();
 
-                // get all columns in the db
                 String [] columns = {MyOpener.COL_TITLE, MyOpener.COL_DESC, MyOpener.COL_DATE, MyOpener.COL_HDURL, MyOpener.COL_IMAGE_FILEPATH, MyOpener.COL_ID};
-                //query all the results from the database:
                 Cursor results = db.query(false, MyOpener.TABLE_NAME, columns, null, null, null, null, null, null);
 
-                //Now the results object has rows of results that match the query.
-                //find the column indices:
                 int titleColIndex = results.getColumnIndex(MyOpener.COL_TITLE);
                 int descColIndex = results.getColumnIndex(MyOpener.COL_DESC);
                 int dateColIndex = results.getColumnIndex(MyOpener.COL_DATE);
@@ -121,7 +105,6 @@ public class FavouritesActivity extends ToolbarActivity
                 int imgFilePathColIndex = results.getColumnIndex(MyOpener.COL_IMAGE_FILEPATH);
                 int idColIndex = results.getColumnIndex(MyOpener.COL_ID);
 
-                //iterate over the results, return true if there is a next item:
                 while(results.moveToNext())
                 {
                     String title = results.getString(titleColIndex);
@@ -131,32 +114,34 @@ public class FavouritesActivity extends ToolbarActivity
                     String hdURL = results.getString(hdURLColIndex);
                     String img_filepath = results.getString(imgFilePathColIndex);
 
-                    //add the new image object to the array list:
                     imageList.add(new ImageObject(title, desc, date, hdURL, img_filepath, id));
                 }
                 results.close();
                 db.close();
-                //At this point, the image array has loaded every row from the cursor.
             }
         }.start();
     }
 
-    // load image from the phone's internal storage
-    private Bitmap loadImageFromStorage(String path, String filename) {
+    private Bitmap loadImageFromStorage(String path, String filename)
+    {
         Bitmap image;
         File f = new File(path, filename);
-        try {
+        try
+        {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 8;
             image = BitmapFactory.decodeFile(f.toString(), options); // reduce bitmap memory usage
-        } catch (OutOfMemoryError e) {
+        }
+        catch (OutOfMemoryError e)
+        {
             Log.e("MemoryError", e.getMessage());
             image = null;
         }
         return image;
     }
 
-    private class MyAdapter extends BaseAdapter {
+    private class MyAdapter extends BaseAdapter
+    {
         private View newView;
 
         public int getCount() {
@@ -176,17 +161,16 @@ public class FavouritesActivity extends ToolbarActivity
             View row = convertView;
             LayoutInflater inflater = getLayoutInflater();
 
-            if (convertView == null) {
+            if (convertView == null)
+            {
                 row = inflater.inflate(R.layout.listview_items, parent, false);
                 viewHolder = new ViewHolder();
                 viewHolder.textView = row.findViewById(R.id.list_TextView);
                 viewHolder.imageView = row.findViewById(R.id.list_ImageView);
-
-                // store the ViewHolder in the View
                 row.setTag(viewHolder);
-            } else {
-                // instead of having to call findViewById() on every resource
-                // just use the ViewHolder
+            }
+            else
+            {
                 viewHolder = (ViewHolder) row.getTag();
             }
 
@@ -197,7 +181,6 @@ public class FavouritesActivity extends ToolbarActivity
         }
     }
 
-    // ViewHolder
     static class ViewHolder
     {
         ImageView imageView;

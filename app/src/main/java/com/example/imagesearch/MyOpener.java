@@ -8,19 +8,19 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MyOpener extends SQLiteOpenHelper
 {
 
-    protected final static String DATABASE_NAME = "Image_Data";
-    protected final static int VERSION_NUM = 1;
-    public final static String TABLE_NAME = "USER_IMAGES";
-    public final static String COL_TITLE = "IMG_TITLE";
-    public final static String COL_DESC = "IMG_DESC";
-    public final static String COL_DATE = "IMG_DATE";
-    public final static String COL_HDURL = "HDURL";
-    public final static String COL_IMAGE_FILEPATH = "IMG_FILEPATH";
-    public final static String COL_ID = "_id";
+    private final static String DATABASE_NAME = "Image_Data";
+    private final static int VERSION_NUM = 1;
+    final static String TABLE_NAME = "USER_IMAGES";
+    final static String COL_TITLE = "IMG_TITLE";
+    final static String COL_DESC = "IMG_DESC";
+    final static String COL_DATE = "IMG_DATE";
+    final static String COL_HDURL = "HDURL";
+    final static String COL_IMAGE_FILEPATH = "IMG_FILEPATH";
+    final static String COL_ID = "_id";
 
     private SQLiteDatabase db;
 
-    public MyOpener(Context ctx)
+    MyOpener(Context ctx)
     {
         super(ctx, DATABASE_NAME, null, VERSION_NUM);
     }
@@ -33,7 +33,7 @@ public class MyOpener extends SQLiteOpenHelper
                 + COL_DESC + " text,"
                 + COL_DATE + " text,"
                 + COL_HDURL + " text,"
-                + COL_IMAGE_FILEPATH  + " text);");  // add or remove columns
+                + COL_IMAGE_FILEPATH  + " text);");
     }
 
     @Override
@@ -52,17 +52,16 @@ public class MyOpener extends SQLiteOpenHelper
         onCreate(db);
     }
 
-    public void insertData(String title, String desc, String date, String hdURL, String img_filepath)
+    void insertData(String title, String desc, String date, String hdURL, String img_filepath)
     {
         new Thread()
         {
             @Override
             public void run()
             {
-                // add the data to the database
                 db = getWritableDatabase();
                 ContentValues newRowValues = new ContentValues();
-                // insert the values into the database columns
+
                 newRowValues.put(MyOpener.COL_TITLE, title);
                 newRowValues.put(MyOpener.COL_DESC, desc);
                 newRowValues.put(MyOpener.COL_DATE, date);
@@ -77,7 +76,7 @@ public class MyOpener extends SQLiteOpenHelper
         }.start();
     }
 
-    public void deleteData(ImageObject imageObject)
+    void deleteData(ImageObject imageObject)
     {
         db = getWritableDatabase();
 

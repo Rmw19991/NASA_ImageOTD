@@ -19,19 +19,14 @@ public class ContactActivity extends ToolbarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
         findViewById(R.id.contact_layout).setVisibility(View.VISIBLE);
-
-        // load toolbar
         loadToolbar(getString(R.string.navTitle_Contact), VERSION);
 
-        // Load the string saved in shared preferences
         prefs = getSharedPreferences("Filename", Context.MODE_PRIVATE);
         String savedName = prefs.getString("Name", "");
 
-        // Get and set the EditText to the user's name
         EditText editText = findViewById(R.id.contact_NameEditText);
         editText.setText(savedName);
 
-        // save users name & sends email on button click
         Button button = findViewById(R.id.contact_SendButton);
         button.setOnClickListener( (click) -> {
             saveSharedPrefs(editText.getText().toString());

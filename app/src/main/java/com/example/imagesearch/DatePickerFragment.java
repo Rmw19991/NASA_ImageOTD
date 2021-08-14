@@ -26,9 +26,11 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     public void onDateSet(DatePicker view, int year, int month, int day)
     {
-        // When the date is set this string will be initialized with the year, month and day values
-        // month needs to be incremented by one here or else the image you get will be a month
-        // behind the date you selected
+        /*
+            When the date is set this string will be initialized with the year, month and day values
+            month needs to be incremented by one here or else the image you get will be a month
+            behind the date you selected
+        */
         dateString = view.getYear() + "-" + (view.getMonth()+1) + "-" + view.getDayOfMonth();
     }
 

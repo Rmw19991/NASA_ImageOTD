@@ -29,12 +29,12 @@ public class ToolbarActivity extends AppCompatActivity implements NavigationView
 
     public void loadToolbar(String title, String version)
     {
-        //For toolbar:
+        // Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
 
-        //For NavigationDrawer:
+        // NavigationDrawer
         DrawerLayout mDrawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 mDrawer, toolbar, R.string.open, R.string.close);
@@ -44,12 +44,10 @@ public class ToolbarActivity extends AppCompatActivity implements NavigationView
         NavigationView nvDrawer = findViewById(R.id.nav_view);
         nvDrawer.setNavigationItemSelectedListener(this);
 
-        // Set nav header title and version
         TextView navHeaderTitle = nvDrawer.getHeaderView(0).findViewById(R.id.navHeader_Title);
         TextView navHeaderVersion = nvDrawer.getHeaderView(0).findViewById(R.id.navHeader_Version);
         navHeaderTitle.setText(title);
         navHeaderVersion.setText(version);
-
 
         reduceChoreographerSkippedFramesWarningThreshold();
     }
@@ -67,20 +65,25 @@ public class ToolbarActivity extends AppCompatActivity implements NavigationView
                         "\n\nTo see a list of your favourite images navigate to the Favourites page. " +
                         "To delete an image, click and hold it. To view the date, url and description of the image, " +
                         "click it once.")
-                // Yes Button
+
                 .setPositiveButton("OK", (click, arg) -> { })
                 .create().show();
     }
 
-    private void reduceChoreographerSkippedFramesWarningThreshold() {
-        if (BuildConfig.DEBUG) {
+    private void reduceChoreographerSkippedFramesWarningThreshold()
+    {
+        if (BuildConfig.DEBUG)
+        {
             Field field = null;
-            try {
+            try
+            {
                 field = Choreographer.class.getDeclaredField("SKIPPED_FRAME_WARNING_LIMIT");
                 field.setAccessible(true);
                 field.setInt(field, field.getModifiers() & ~Modifier.FINAL);
                 field.set(null, 5);
-            } catch (Throwable e) {
+            }
+            catch (Throwable e)
+            {
                 Log.e("ERROR3", "Failed to change choreographer's skipped frames threshold");
             }
         }

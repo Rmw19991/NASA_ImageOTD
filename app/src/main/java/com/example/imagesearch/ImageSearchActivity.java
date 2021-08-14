@@ -24,8 +24,6 @@ public class ImageSearchActivity extends ToolbarActivity
     public final static String VERSION = "v0.1"; // Apps version #. displayed in the NavDrawer
     public final static String SAVE_MESSAGE = "Image Saved!"; // Message for Toast to display
 
-    // image details
-    private String dateString;
     private String imageTitle;
     private String imageDesc;
     private String imageDate;
@@ -44,8 +42,6 @@ public class ImageSearchActivity extends ToolbarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
         findViewById(R.id.image_search_layout).setVisibility(View.VISIBLE);
-
-        // load toolbar
         loadToolbar(getString(R.string.navTitle_ImageSearch), VERSION);
     }
 
@@ -58,8 +54,8 @@ public class ImageSearchActivity extends ToolbarActivity
 
     public void searchImage(View v)
     {
-        String url = "https://api.nasa.gov/planetary/apod?api_key=DgPLcIlnmN0Cwrzcg3e9NraFaYLIDI68Ysc6Zh3d&date=";
-        dateString = url + datePickerFragment.getDateString();
+        String url = "https://api.nasa.gov/planetary/apod?api_key=";
+        String dateString = url + datePickerFragment.getDateString();
         new ImageQuery().executeQuery(dateString);
     }
 

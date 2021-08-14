@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_background"
+    android:background="@android:color/holo_blue_light"
     android:layout_centerHorizontal="true">
 
     <TextView
@@ -45,7 +45,8 @@
         android:layout_alignParentEnd="true"
         android:text="@string/imageSearch_SearchImage"
         android:layout_margin="10dp"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        android:onClick="searchImage"/>
 
     <Button
         android:id="@+id/imageSearch_SaveButtonView"
@@ -54,5 +55,6 @@
         android:text="@string/imageSearch_SaveImage"
         android:layout_below="@+id/imageSearch_HDURLTextView"
         android:layout_margin="10dp"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        android:onClick="saveToFavourites"/>
 </RelativeLayout>

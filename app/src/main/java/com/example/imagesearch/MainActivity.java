@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -29,8 +30,6 @@ public class MainActivity extends ToolbarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
         findViewById(R.id.home_layout).setVisibility(View.VISIBLE);
-
-        // load toolbar & nav
         loadToolbar(getString(R.string.navTitle_Home), VERSION);
 
         // Format current date to yyyy/mm/dd
@@ -38,10 +37,8 @@ public class MainActivity extends ToolbarActivity
         Date date = new Date();
         String formattedDate = dateFormat.format(date);
 
-        // append date to the url to get image of the day
-        String url = "https://api.nasa.gov/planetary/apod?api_key=DgPLcIlnmN0Cwrzcg3e9NraFaYLIDI68Ysc6Zh3d&date=" + formattedDate;
+        String url = "https://api.nasa.gov/planetary/apod?api_key=" + formattedDate;
         Query query = new Query();
-        //query.fetchJsonData(url);
         query.executeQuery(url);
     }
 
@@ -81,7 +78,7 @@ public class MainActivity extends ToolbarActivity
                             progressBar.setProgress(25);
                         }
                     } catch (Exception e) {
-                        //Log.e("ERROR", e.getMessage());
+                        Log.e("ERROR", e.getMessage());
                     }
                     saveJsonData(jsonData.toString());
                     fetchImage();
@@ -98,14 +95,12 @@ public class MainActivity extends ToolbarActivity
         {
             try
             {
-                // Create a JSON object using the string that holds the JSON data
                 JSONObject jsonObject = new JSONObject(jsonData);
 
-                if (!jsonObject.has("hdurl")) //Some images do not contain a hdurl so check the jsonObject to see if it has one
+                if (!jsonObject.has("hdurl"))
                 {
                     hdURL = null;
                 }
-                // Store title, date, and description data from the JSON object
                 title = jsonObject.getString("title");
                 date = jsonObject.getString("date");
                 desc = jsonObject.getString("explanation");
@@ -119,7 +114,6 @@ public class MainActivity extends ToolbarActivity
         }
 
         private void fetchImage() {
-            // If the hdurl is not null the program will retrieve the image
             if (hdURL == null) {
                 hdURL = "Cannot provide HDURL";
 

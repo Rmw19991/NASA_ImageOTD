@@ -10,8 +10,7 @@
         android:layout_marginTop="25dp"
         android:layout_marginBottom="50dp"
         android:layout_marginLeft="35dp"
-        android:layout_marginRight="35dp"
-        android:background="@drawable/listview_item_border">
+        android:layout_marginRight="35dp">
 
         <TextView
             android:layout_marginTop="10dp"
@@ -28,7 +27,6 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_below="@+id/list_TextView"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/image_border"/>
+            android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 </LinearLayout>
